@@ -1,7 +1,7 @@
 const Hero = () => (
-  <div style={{ textAlign: "center" }}>
-    <h1>Document Organizer</h1>
-    <h4>Stay Organized. Be Awesome.</h4>
+  <div className="mb-8 pt-8 text-center">
+    <h1 className="text-5xl font-medium">Document Organizer</h1>
+    <h2 className="text-base font-light">Stay Organized. Be Awesome.</h2>
   </div>
 );
 
