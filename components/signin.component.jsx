@@ -23,7 +23,7 @@ const SignIn = () => {
         throw new Error("Login failed...");
       }
 
-      Router.push("/");
+      Router.push("/dashboard");
     } catch (err) {
       console.error(err);
     }
@@ -32,8 +32,12 @@ const SignIn = () => {
   };
 
   return (
-    <button disabled={isAuthorizing} onClick={handleAuth}>
-      Sign In with Google
+    <button
+      disabled={isAuthorizing}
+      onClick={handleAuth}
+      className="flex items-center justify-center rounded-md border border-gray-300 px-3 py-2 hover:bg-black hover:text-white"
+    >
+      Get Started
     </button>
   );
 };
