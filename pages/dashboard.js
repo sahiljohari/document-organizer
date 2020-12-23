@@ -1,27 +1,26 @@
-import { useAuthState } from "react-firebase-hooks/auth";
-import firebase from "firebase/app";
-import Router from "next/router";
 import Navbar from "../components/navbar.component";
 import Header from "../components/header.component";
-
-const auth = firebase.auth();
-
-const logout = () => {
-  auth.signOut();
-  Router.push("/");
-};
+import ItemList from "../components/itemlist.component";
+import { useAuth } from "../utils/auth";
 
 const Dashboard = () => {
-  const [user] = useAuthState(auth);
-  const { displayName, email, photoURL, uid } = user;
+  const { user, signout } = useAuth();
+  let pageContent = null;
 
-  // List of documents with props: uid
-  return (
-    <>
-      <Navbar email={email} photoURL={photoURL} signOut={logout} />
-      <Header name={displayName} />
-    </>
-  );
+  if (user) {
+    const { displayName, email, photoURL, uid } = user;
+    pageContent = (
+      <>
+        <Navbar email={email} photoURL={photoURL} signOut={signout} />
+        <Header name={displayName} />
+        {/* <ItemList items={documentList} /> */}
+      </>
+    );
+  } else {
+    pageContent = <h1>Loading...</h1>;
+  }
+
+  return pageContent;
 };
 
 export default Dashboard;

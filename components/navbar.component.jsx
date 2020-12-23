@@ -1,7 +1,13 @@
 import { useState } from "react";
+import Router from "next/router";
 
 const Navbar = ({ email, photoURL, signOut }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const handleSignOut = () => {
+    signOut();
+    Router.push("/");
+  };
 
   return (
     <nav className="bg-gray-800">
@@ -34,7 +40,7 @@ const Navbar = ({ email, photoURL, signOut }) => {
               <a
                 className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 role="menuitem"
-                onClick={signOut}
+                onClick={handleSignOut}
               >
                 Sign out
               </a>

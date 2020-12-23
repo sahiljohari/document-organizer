@@ -1,23 +1,16 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/analytics";
-import initFirebase from "../configs/firebaseConfig";
 import Router from "next/router";
 import { useState } from "react";
-
-initFirebase();
-
-const provider = new firebase.auth.GoogleAuthProvider();
+import { useAuth } from "../utils/auth";
 
 const SignIn = () => {
   const [isAuthorizing, setIsAuthorizing] = useState(false);
+  const auth = useAuth();
 
   const handleAuth = async () => {
     setIsAuthorizing(true);
 
     try {
-      const results = await firebase.auth().signInWithPopup(provider);
-      const { user } = results;
+      const user = await auth.signinWithGoogle();
 
       if (!user) {
         throw new Error("Login failed...");

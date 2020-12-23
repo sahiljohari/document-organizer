@@ -1,7 +1,3 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/analytics";
-
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY,
   authDomain: "document-tracker-323d3.firebaseapp.com",
@@ -12,8 +8,4 @@ const config = {
   measurementId: "G-785YF4G76C",
 };
 
-export default function initFirebase() {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(config);
-  }
-}
+export default config;
