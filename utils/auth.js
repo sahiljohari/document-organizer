@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 import config from "../configs/firebaseConfig";
 
 if (!firebase.apps.length) {
@@ -8,6 +9,8 @@ if (!firebase.apps.length) {
 }
 
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+googleAuthProvider.setCustomParameters({ prompt: "select_account" });
+
 const authContext = createContext();
 
 export function ProvideAuth({ children }) {
@@ -32,7 +35,6 @@ function useProvideAuth() {
 
   const signinWithGoogle = async () => {
     const { user } = await firebase.auth().signInWithPopup(googleAuthProvider);
-    setUser(user);
     return user;
   };
 
@@ -61,10 +63,42 @@ function useProvideAuth() {
     return true;
   };
 
+  const createUserProfileDocument = async (userAuth, additionalData) => {
+    if (!userAuth) return;
+
+    const userRef = firebase.firestore().doc(`users/${userAuth.uid}`);
+    const snapShot = await userRef.get();
+
+    if (!snapShot.exists) {
+      const { displayName, email, photoURL } = userAuth;
+      const createdAt = new Date();
+
+      try {
+        await userRef.set({
+          displayName,
+          email,
+          photoURL,
+          createdAt,
+          ...additionalData,
+        });
+      } catch (error) {
+        console.log("Error creating user", error.message);
+      }
+    }
+
+    return userRef;
+  };
+
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
-        setUser(user);
+        const userRef = await createUserProfileDocument(user);
+        userRef.onSnapshot((snapShot) => {
+          setUser({
+            id: snapShot.id,
+            ...snapShot.data(),
+          });
+        });
       } else {
         setUser(null);
       }
