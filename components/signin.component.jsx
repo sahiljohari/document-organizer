@@ -4,13 +4,13 @@ import { useAuth } from "../utils/auth";
 
 const SignIn = () => {
   const [isAuthorizing, setIsAuthorizing] = useState(false);
-  const auth = useAuth();
+  const { signinWithGoogle } = useAuth();
 
   const handleAuth = async () => {
     setIsAuthorizing(true);
 
     try {
-      const user = await auth.signinWithGoogle();
+      const user = await signinWithGoogle();
 
       if (!user) {
         throw new Error("Login failed...");
@@ -30,7 +30,7 @@ const SignIn = () => {
       onClick={handleAuth}
       className="flex items-center justify-center rounded-md border border-gray-300 px-3 py-2 hover:bg-black hover:text-white"
     >
-      Get Started
+      Sign In
     </button>
   );
 };

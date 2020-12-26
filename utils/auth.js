@@ -51,18 +51,6 @@ function useProvideAuth() {
     setUser(null);
   };
 
-  const sendPasswordResetEmail = async (email) => {
-    await firebase.auth().sendPasswordResetEmail(email);
-    return true;
-  };
-
-  const confirmPasswordReset = async (password, code) => {
-    const resetCode = code || getFromQueryString("oobCode");
-
-    await firebase.auth().confirmPasswordReset(resetCode, password);
-    return true;
-  };
-
   const createUserProfileDocument = async (userAuth, additionalData) => {
     if (!userAuth) return;
 
@@ -113,7 +101,6 @@ function useProvideAuth() {
     signinWithGoogle,
     signup,
     signout,
-    sendPasswordResetEmail,
-    confirmPasswordReset,
+    createUserProfileDocument,
   };
 }
