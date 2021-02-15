@@ -1,10 +1,10 @@
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY,
-  authDomain: "document-tracker-323d3.firebaseapp.com",
-  projectId: "document-tracker-323d3",
-  storageBucket: "document-tracker-323d3.appspot.com",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_STORAGE_BUCKET,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_APP_ID,
   messagingSenderId: "123949569144",
-  appId: "1:123949569144:web:9abfa159371a05f58e898d",
   measurementId: "G-785YF4G76C",
 };
 

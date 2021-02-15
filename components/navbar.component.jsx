@@ -22,7 +22,11 @@ const Navbar = ({ email, photoURL, signOut }) => {
                 aria-haspopup="true"
                 onClick={() => setShowUserMenu(!showUserMenu)}
               >
-                <img className="h-8 w-8 rounded-full" src={photoURL} alt="" />
+                <img
+                  className="h-8 w-8 rounded-full"
+                  src={photoURL || "assets/images/user.png"}
+                  alt={`Photo of ${email}`}
+                />
               </button>
             </div>
 

@@ -25,7 +25,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 mx-8 w-full">
       <h2 className="mb-4 text-lg">Don't have an account yet? Sign Up here!</h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -46,6 +46,7 @@ const SignUp = () => {
           type="email"
           placeholder="johndoe@site.com"
           ref={register({ required: true })}
+          autoComplete="off"
         />
 
         <FormInput
@@ -54,6 +55,7 @@ const SignUp = () => {
           name="password"
           type="password"
           ref={register({ min: 8, max: 12, required: true })}
+          autoComplete="off"
         />
 
         <FormInput
@@ -66,7 +68,8 @@ const SignUp = () => {
 
         <input
           type="submit"
-          className="flex items-center justify-center mt-4 rounded-md border border-gray-300 px-3 py-2 bg-white hover:bg-black hover:text-white"
+          value="Sign Up"
+          className="flex items-center justify-center mt-4 rounded-md border border-gray-300 px-3 py-2 bg-white hover:bg-black hover:text-white duration-200"
         />
       </form>
     </div>
