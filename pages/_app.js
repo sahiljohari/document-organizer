@@ -1,6 +1,7 @@
 import "tailwindcss/tailwind.css";
 import Head from "next/head";
 import { ProvideAuth } from "../utils/auth";
+import { DocumentContextProvider } from "../utils/documentContext";
 
 const MyApp = ({ Component, pageProps }) => (
   <>
@@ -14,7 +15,9 @@ const MyApp = ({ Component, pageProps }) => (
       />
     </Head>
     <ProvideAuth>
-      <Component {...pageProps} />
+      <DocumentContextProvider>
+        <Component {...pageProps} />
+      </DocumentContextProvider>
     </ProvideAuth>
   </>
 );

@@ -1,26 +1,21 @@
 import { useState, useEffect } from "react";
 import { useDocumentState } from "../utils/documentContext";
-import { useAuth } from "../utils/auth";
 
 const Header = ({ name }) => {
-  const { user } = useAuth();
-  const { setUserDocuments } = useDocumentState();
+  const { documentState } = useDocumentState();
+  const {
+    documents: { count: documentsUploaded, list },
+  } = documentState;
 
-  const [documentsUploaded, setDocumentsUploaded] = useState(0);
   const [badDocuments, setBadDocuments] = useState(0);
 
   useEffect(() => {
-    if (user) {
-      setUserDocuments(user.documents);
-      setDocumentStats();
-    }
-  }, [user]);
+    updateBadDocuments();
+  }, [list]);
 
-  const setDocumentStats = () => {
-    let badDocs = 0;
-    // TODO: add logic here to determine documents that need attention
-    setDocumentsUploaded(user.documents.count);
-    setBadDocuments(badDocs);
+  const updateBadDocuments = () => {
+    // TODO: add logic to compute bad documents from "list"
+    setBadDocuments(0);
   };
 
   return (

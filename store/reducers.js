@@ -9,9 +9,7 @@ import {
 const reducer = (state, action) => {
   switch (action.type) {
     case SET_USER_DOCUMENTS:
-      state.documents.count = action.payload.count;
-      state.documents.list = action.payload.list;
-      return state;
+      return { ...state, documents: action.payload };
 
     case GET_DOCUMENT:
       return state.documents.list.find(
@@ -19,15 +17,24 @@ const reducer = (state, action) => {
       );
 
     case ADD_DOCUMENT:
-      state.documents.count++;
-      state.documents.list.unshift(action.payload);
-      return state;
+      return {
+        ...state,
+        documents: {
+          count: state.documents.count + 1,
+          list: [action.payload, ...state.documents.list],
+        },
+      };
 
     case DELETE_DOCUMENT:
-      state.documents.count--;
-      return state.documents.list.filter(
-        (document) => document.id !== action.payload.id
-      );
+      return {
+        ...state,
+        documents: {
+          count: state.documents.count - 1,
+          list: state.documents.list.filter(
+            (document) => document.id !== action.payload.id
+          ),
+        },
+      };
 
     case EDIT_DOCUMENT:
       return state.documents.list.map((document) => {
