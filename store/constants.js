@@ -1,7 +1,6 @@
 // Action types
 export const SET_USER_DOCUMENTS = "SET_USER_DOCUMENTS";
 export const GET_DOCUMENT = "GET_DOCUMENT";
-export const GET_ALL_DOCUMENTS = "GET_ALL_DOCUMENTS";
 export const ADD_DOCUMENT = "ADD_DOCUMENT";
 export const DELETE_DOCUMENT = "DELETE_DOCUMENT";
 export const EDIT_DOCUMENT = "EDIT_DOCUMENT";

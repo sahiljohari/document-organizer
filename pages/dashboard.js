@@ -1,6 +1,5 @@
-import React from "react";
 import { useAuth } from "../utils/auth";
-import { UserContextProvider } from "../utils/userContext";
+import { DocumentContextProvider } from "../utils/documentContext";
 
 import Navbar from "../components/navbar.component";
 import Header from "../components/header.component";
@@ -16,11 +15,11 @@ const Dashboard = () => {
   const { displayName, email, photoURL } = user;
 
   return (
-    <UserContextProvider>
+    <DocumentContextProvider>
       <Navbar email={email} photoURL={photoURL} signOut={signout} />
       <Header name={displayName} />
       <DashboardPanel />
-    </UserContextProvider>
+    </DocumentContextProvider>
   );
 };
 

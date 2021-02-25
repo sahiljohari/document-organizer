@@ -1,7 +1,6 @@
 import {
   SET_USER_DOCUMENTS,
   GET_DOCUMENT,
-  GET_ALL_DOCUMENTS,
   ADD_DOCUMENT,
   DELETE_DOCUMENT,
   EDIT_DOCUMENT,
@@ -10,16 +9,14 @@ import {
 const reducer = (state, action) => {
   switch (action.type) {
     case SET_USER_DOCUMENTS:
-      state.documents = action.payload;
+      state.documents.count = action.payload.count;
+      state.documents.list = action.payload.list;
       return state;
 
     case GET_DOCUMENT:
       return state.documents.list.find(
         (document) => document.id === action.payload.id
       );
-
-    case GET_ALL_DOCUMENTS:
-      return state.documents.list;
 
     case ADD_DOCUMENT:
       state.documents.count++;

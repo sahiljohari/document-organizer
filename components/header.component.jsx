@@ -1,13 +1,26 @@
-import { useUserState } from "../utils/userContext";
+import { useState, useEffect } from "react";
+import { useDocumentState } from "../utils/documentContext";
+import { useAuth } from "../utils/auth";
 
 const Header = ({ name }) => {
-  const { documentState } = useUserState();
-  const {
-    documents: { count, list },
-  } = documentState;
+  const { user } = useAuth();
+  const { setUserDocuments } = useDocumentState();
 
-  const getExpiredDocuments = () => {
-    return 0;
+  const [documentsUploaded, setDocumentsUploaded] = useState(0);
+  const [badDocuments, setBadDocuments] = useState(0);
+
+  useEffect(() => {
+    if (user) {
+      setUserDocuments(user.documents);
+      setDocumentStats();
+    }
+  }, [user]);
+
+  const setDocumentStats = () => {
+    let badDocs = 0;
+    // TODO: add logic here to determine documents that need attention
+    setDocumentsUploaded(user.documents.count);
+    setBadDocuments(badDocs);
   };
 
   return (
@@ -18,11 +31,12 @@ const Header = ({ name }) => {
         </h1>
         <div className="flex flex-row">
           <p className="mx-2">
-            <span className="text-2xl">{count}</span> documents uploaded
+            <span className="text-2xl">{documentsUploaded}</span> documents
+            uploaded
           </p>
           <p className="mx-2">
-            <span className="text-2xl">{getExpiredDocuments()}</span> documents
-            need attention
+            <span className="text-2xl">{badDocuments}</span> documents need
+            attention
           </p>
         </div>
       </div>
