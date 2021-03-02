@@ -1,13 +1,9 @@
-import { useReducer, useContext, createContext } from "react";
-import reducer from "../store/reducers";
+import { useState, useContext, createContext } from "react";
 import {
-  setUserDocumentsAction,
-  getDocumentAction,
-  addDocumentAction,
-  deleteDocumentAction,
-  editDocumentAction,
-} from "../store/actions";
-import { INITIAL_STATE } from "../store/state";
+  addDocumentUtil,
+  editDocumentUtil,
+  deleteDocumentUtil,
+} from "./documentUtils";
 
 const DocumentContext = createContext();
 
@@ -24,32 +20,37 @@ export const useDocumentState = () => {
 };
 
 const useProvideDocumentState = () => {
-  const [documentState, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [documentState, setDocumentState] = useState({
+    documents: {
+      count: 0,
+      list: [],
+    },
+  });
 
   const setUserDocuments = (documents) => {
-    dispatch(setUserDocumentsAction(documents));
+    setDocumentState({ documents });
   };
 
-  const getDocument = (document) => {
-    dispatch(getDocumentAction(document));
-  };
+  // const getDocument = (document) => {
+  //   dispatch(getDocumentAction(document));
+  // };
 
   const addDocument = (newDocument) => {
-    dispatch(addDocumentAction(newDocument));
+    setDocumentState(addDocumentUtil(documentState, newDocument));
   };
 
   const deleteDocument = (document) => {
-    dispatch(deleteDocumentAction(document));
+    setDocumentState(deleteDocumentUtil(documentState, document));
   };
 
   const editDocument = (document) => {
-    dispatch(editDocumentAction(document));
+    setDocumentState(editDocumentUtil(documentState, document));
   };
 
   return {
     documentState,
     setUserDocuments,
-    getDocument,
+    // getDocument,
     addDocument,
     deleteDocument,
     editDocument,
