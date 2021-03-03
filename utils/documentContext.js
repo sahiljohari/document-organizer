@@ -5,6 +5,7 @@ import {
   editDocumentUtil,
   deleteDocumentUtil,
 } from "./documentUtils";
+import { ADD_DOCUMENT, EDIT_DOCUMENT, DELETE_DOCUMENT } from "./constants";
 
 const DocumentContext = createContext();
 
@@ -34,37 +35,39 @@ const useProvideDocumentState = () => {
     setDocumentState({ documents });
   };
 
-  // const getDocument = (document) => {
-  //   dispatch(getDocumentAction(document));
-  // };
+  const performTransaction = async (payload, transactionType) => {
+    if (!user) return;
 
-  const addDocument = async (newDocument) => {
-    if (user) {
-      const userRef = firebase.firestore().doc(`users/${user.id}`);
-      try {
-        const updatedState = addDocumentUtil(documentState, newDocument);
-        await userRef.update(updatedState);
-        setDocumentState(updatedState);
-      } catch (error) {
-        console.error("Error adding new document", error.message);
-      }
+    const userRef = firebase.firestore().doc(`users/${user.id}`);
+    let updatedState = null;
+    switch (transactionType) {
+      case ADD_DOCUMENT:
+        updatedState = addDocumentUtil(documentState, payload);
+        break;
+
+      case EDIT_DOCUMENT:
+        updatedState = editDocumentUtil(documentState, payload);
+        break;
+
+      case DELETE_DOCUMENT:
+        updatedState = deleteDocumentUtil(documentState, payload);
+        break;
     }
-  };
 
-  const deleteDocument = (document) => {
-    setDocumentState(deleteDocumentUtil(documentState, document));
-  };
-
-  const editDocument = (document) => {
-    setDocumentState(editDocumentUtil(documentState, document));
+    try {
+      await userRef.update(updatedState);
+      setDocumentState(updatedState);
+    } catch (error) {
+      console.error(
+        "Error performing transaction with the database...",
+        error.message
+      );
+    }
   };
 
   return {
     documentState,
     setUserDocuments,
-    // getDocument,
-    addDocument,
-    deleteDocument,
-    editDocument,
+    performTransaction,
   };
 };

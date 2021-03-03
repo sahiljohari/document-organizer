@@ -1,8 +1,9 @@
 import { useDocumentState } from "../utils/documentContext";
+import { ADD_DOCUMENT } from "../utils/constants";
 import ItemList from "../components/itemlist.component";
 
 const DashboardPanel = () => {
-  const { addDocument } = useDocumentState();
+  const { performTransaction } = useDocumentState();
   const handleAdd = () => {
     const newDocument = {
       id: 4,
@@ -12,7 +13,7 @@ const DashboardPanel = () => {
       documentEndDate: Date.now(),
       createdOn: Date.now(),
     };
-    addDocument(newDocument);
+    performTransaction(newDocument, ADD_DOCUMENT);
   };
   return (
     <div className="flex flex-col mx-auto my-5 max-w-5xl">
