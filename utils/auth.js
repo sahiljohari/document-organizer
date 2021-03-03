@@ -103,3 +103,5 @@ function useProvideAuth() {
     createUserProfileDocument,
   };
 }
+
+export { firebase };

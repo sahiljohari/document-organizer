@@ -1,4 +1,5 @@
 import { useState, useContext, createContext } from "react";
+import { useAuth, firebase } from "./auth";
 import {
   addDocumentUtil,
   editDocumentUtil,
@@ -20,6 +21,8 @@ export const useDocumentState = () => {
 };
 
 const useProvideDocumentState = () => {
+  const { user } = useAuth();
+
   const [documentState, setDocumentState] = useState({
     documents: {
       count: 0,
@@ -35,8 +38,17 @@ const useProvideDocumentState = () => {
   //   dispatch(getDocumentAction(document));
   // };
 
-  const addDocument = (newDocument) => {
-    setDocumentState(addDocumentUtil(documentState, newDocument));
+  const addDocument = async (newDocument) => {
+    if (user) {
+      const userRef = firebase.firestore().doc(`users/${user.id}`);
+      try {
+        const updatedState = addDocumentUtil(documentState, newDocument);
+        await userRef.update(updatedState);
+        setDocumentState(updatedState);
+      } catch (error) {
+        console.error("Error adding new document", error.message);
+      }
+    }
   };
 
   const deleteDocument = (document) => {
