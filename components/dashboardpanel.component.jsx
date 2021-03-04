@@ -12,10 +12,17 @@ import FormInput from "./common/forminput.component";
 const DashboardPanel = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { performTransaction } = useDocumentState();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const { addToast } = useToasts();
 
   const handleSaveDocument = async (data) => {
+    const { documentStartDate, documentEndDate } = data;
+
+    if (new Date(documentStartDate) >= new Date(documentEndDate)) {
+      // error message here
+      return;
+    }
+
     const payload = {
       id: uuid(),
       createdOn: new Date(),
@@ -54,7 +61,7 @@ const DashboardPanel = () => {
             label="Document Name"
             name="documentName"
             placeholder="Ex. Passport, Drivers License, etc."
-            ref={register({ required: true, maxLength: 50 })}
+            ref={register({ required: true, maxLength: 50, minLength: 2 })}
           />
 
           <FormInput
