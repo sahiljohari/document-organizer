@@ -2,6 +2,7 @@ import "tailwindcss/tailwind.css";
 import Head from "next/head";
 import { ProvideAuth } from "../utils/auth";
 import { DocumentContextProvider } from "../utils/documentContext";
+import { ToastProvider } from "react-toast-notifications";
 
 const MyApp = ({ Component, pageProps }) => (
   <>
@@ -14,11 +15,13 @@ const MyApp = ({ Component, pageProps }) => (
         rel="stylesheet"
       />
     </Head>
-    <ProvideAuth>
-      <DocumentContextProvider>
-        <Component {...pageProps} />
-      </DocumentContextProvider>
-    </ProvideAuth>
+    <ToastProvider>
+      <ProvideAuth>
+        <DocumentContextProvider>
+          <Component {...pageProps} />
+        </DocumentContextProvider>
+      </ProvideAuth>
+    </ToastProvider>
   </>
 );
 
