@@ -15,20 +15,18 @@ const Navbar = ({ email, photoURL, signOut }) => {
         <div className="relative flex items-center justify-between h-16">
           <h2 className="text-white text-xl">Document Organizer</h2>
           <div className="ml-3 relative">
-            <div>
-              <button
-                className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                id="user-menu"
-                aria-haspopup="true"
-                onClick={() => setShowUserMenu(!showUserMenu)}
-              >
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src={photoURL || "assets/images/user.png"}
-                  alt={`Photo of ${email}`}
-                />
-              </button>
-            </div>
+            <button
+              className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+              id="user-menu"
+              aria-haspopup="true"
+              onClick={() => setShowUserMenu(!showUserMenu)}
+            >
+              <img
+                className="h-8 w-8 rounded-full"
+                src={photoURL || "assets/images/user.png"}
+                alt={`Photo of ${email}`}
+              />
+            </button>
 
             <div
               className={`${
@@ -37,6 +35,8 @@ const Navbar = ({ email, photoURL, signOut }) => {
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="user-menu"
+              onMouseOver={() => setShowUserMenu(true)}
+              onMouseOut={() => setShowUserMenu(false)}
             >
               <div className="text-sm text-left px-4 py-2 text-gray-700">
                 Signed in as {email}

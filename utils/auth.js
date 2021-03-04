@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import { useState, useEffect, useContext, createContext } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -29,7 +29,6 @@ function useProvideAuth() {
     const response = await firebase
       .auth()
       .signInWithEmailAndPassword(email, password);
-    setUser(response.user);
     return response.user;
   };
 
@@ -42,13 +41,11 @@ function useProvideAuth() {
     const response = await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password);
-    setUser(response.user);
     return response.user;
   };
 
   const signout = async () => {
     await firebase.auth().signOut();
-    setUser(null);
   };
 
   const createUserProfileDocument = async (userAuth, additionalData) => {
@@ -60,6 +57,7 @@ function useProvideAuth() {
     if (!snapShot.exists) {
       const { displayName, email, photoURL } = userAuth;
       const createdAt = new Date();
+      const documents = { count: 0, list: [] };
 
       try {
         await userRef.set({
@@ -67,6 +65,7 @@ function useProvideAuth() {
           email,
           photoURL,
           createdAt,
+          documents,
           ...additionalData,
         });
       } catch (error) {
@@ -104,3 +103,5 @@ function useProvideAuth() {
     createUserProfileDocument,
   };
 }
+
+export { firebase };
