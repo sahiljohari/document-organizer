@@ -4,7 +4,7 @@ import { useToasts } from "react-toast-notifications";
 import { useDocumentState } from "../utils/documentContext";
 import { useForm } from "react-hook-form";
 
-import { ADD_DOCUMENT } from "../utils/constants";
+import { ADD_DOCUMENT, documentTypes } from "../utils/constants";
 import ModalComponent from "../components/common/modal.component";
 import ItemList from "../components/itemlist.component";
 import FormInput from "./common/forminput.component";
@@ -57,23 +57,29 @@ const DashboardPanel = () => {
           className="flex flex-col mt-2 justify-center w-full"
         >
           <FormInput
-            classNames="mb-3 focus:border-light-blue-500 focus:ring-1 focus:ring-light-blue-500 focus:outline-none w-full text-sm text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-2"
+            classNames="mb-6 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             label="Document Name"
             name="documentName"
             placeholder="Ex. Passport, Drivers License, etc."
             ref={register({ required: true, maxLength: 50, minLength: 2 })}
           />
 
-          <FormInput
-            classNames="mb-3 focus:border-light-blue-500 focus:ring-1 focus:ring-light-blue-500 focus:outline-none w-full text-sm text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-2"
-            label="Date of Issue"
-            name="documentStartDate"
-            type="date"
-            ref={register({ required: true })}
-          />
+          <label>Document Type</label>
+          <select
+            className="mb-6 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            name="documentType"
+            ref={register}
+          >
+            {Object.entries(documentTypes).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value.icon}
+                {value.displayText}
+              </option>
+            ))}
+          </select>
 
           <FormInput
-            classNames="mb-3 focus:border-light-blue-500 focus:ring-1 focus:ring-light-blue-500 focus:outline-none w-full text-sm text-black placeholder-gray-500 border border-gray-200 rounded-md py-2 pl-2"
+            classNames="mb-6 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             label="Date of Expiry"
             name="documentEndDate"
             type="date"

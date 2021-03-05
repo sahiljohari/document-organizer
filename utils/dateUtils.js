@@ -6,4 +6,12 @@ const formatDate = (date) => {
   return `${monthString}-${dateString}-${date.getFullYear()}`;
 };
 
-export { formatDate };
+const getRemainingDays = (expiryDate) => {
+  const expDate = new Date(expiryDate);
+  const today = new Date();
+  const diffTime = Math.abs(expDate - today);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+};
+
+export { formatDate, getRemainingDays };

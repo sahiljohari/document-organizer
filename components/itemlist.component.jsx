@@ -1,28 +1,48 @@
 import { useDocumentState } from "../utils/documentContext";
-import { formatDate } from "../utils/dateUtils";
+import { getRemainingDays } from "../utils/dateUtils";
+import {
+  documentTypes,
+  DANGER_THRESHOLD,
+  WARNING_THRESHOLD,
+} from "../utils/constants";
 
 const ItemList = () => {
   const { documentState } = useDocumentState();
   const userDocuments = documentState.documents.list;
+
   return (
-    <div className="flex place-content-center my-8">
-      <ul className="divide-y divide-gray-100 w-full">
+    <div className="flex place-content-center my-8 w-1/2 mx-auto">
+      <ul className="w-full">
         {userDocuments.map((doc) => {
-          const { id, documentName, documentStartDate, documentEndDate } = doc;
+          const { id, documentName, documentType, documentEndDate } = doc;
+          const remainingDays = getRemainingDays(documentEndDate);
           return (
-            <div key={id} className="flex flex-row place-content-between p-2">
-              <div>{documentName}</div>
-              <div className="flex flex-row">
-                <p className="mx-2">
-                  Valid from: {formatDate(new Date(documentStartDate))}
-                </p>
-                <p className="mx-2">
-                  Expires on: {formatDate(new Date(documentEndDate))}
-                </p>
-                <div className="ml-2">
-                  <button className="m-1">&#9997;</button>
-                  <button className="m-1">&#10005;</button>
-                </div>
+            <div
+              key={id}
+              className={`flex flex-row place-content-between p-2 border-l-8 border rounded-md my-2 ${
+                remainingDays <= WARNING_THRESHOLD
+                  ? remainingDays <= DANGER_THRESHOLD
+                    ? "border-red-600"
+                    : "border-yellow-500"
+                  : "border-green-700"
+              }`}
+            >
+              <div className="flex flex-row place-content-evenly">
+                <span className="mr-4 my-auto">
+                  {documentTypes[documentType]["icon"]}
+                </span>
+                <span className="mr-4 my-auto text-lg text-indigo-900 font-medium">
+                  {documentName}
+                </span>
+              </div>
+              <div>
+                {remainingDays <= WARNING_THRESHOLD && (
+                  <span className="mr-4 my-auto text-sm font-light">
+                    🕒 {remainingDays}d
+                  </span>
+                )}
+                <button className="mx-3 my-auto">&#9997;</button>
+                <button className="mx-3 my-auto">&#10005;</button>
               </div>
             </div>
           );
