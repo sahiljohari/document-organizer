@@ -7,7 +7,7 @@ import { ToastProvider } from "react-toast-notifications";
 const MyApp = ({ Component, pageProps }) => (
   <>
     <Head>
-      <title>Document Organizer App</title>
+      <title>ExpiryMinder App</title>
       <link rel="icon" href="/favicon.ico" />
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link

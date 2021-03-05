@@ -13,7 +13,7 @@ const Navbar = ({ email, photoURL, signOut }) => {
     <nav className="bg-gray-800">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
-          <h2 className="text-white text-xl">Document Organizer</h2>
+          <h2 className="text-white text-xl">🔔 ExpiryMinder</h2>
           <div className="ml-3 relative">
             <button
               className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
