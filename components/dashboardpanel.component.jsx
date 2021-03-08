@@ -19,6 +19,12 @@ const DashboardPanel = () => {
   const { performTransaction } = useDocumentState();
   const { addToast } = useToasts();
 
+  const resetForm = () => {
+    setModalIsOpen(false);
+    setIsEditing(false);
+    setFormState(INITIAL_FORM_STATE);
+  };
+
   const handleSaveDocument = async (data) => {
     if (!isEditing) {
       const payload = {
@@ -36,8 +42,7 @@ const DashboardPanel = () => {
       appearance: "success",
       autoDismiss: true,
     });
-    setModalIsOpen(false);
-    setFormState(INITIAL_FORM_STATE);
+    resetForm();
   };
 
   return (
@@ -55,15 +60,13 @@ const DashboardPanel = () => {
           setIsEditing={setIsEditing}
         />
       </div>
-      <ModalComponent
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-      >
+      <ModalComponent isOpen={modalIsOpen} onRequestClose={resetForm}>
         <DocumentForm
           formTitle={isEditing ? "Edit Document" : "Add a Document"}
           formValues={isEditing ? formState : INITIAL_FORM_STATE}
           handleSaveDocument={handleSaveDocument}
           setModalIsOpen={setModalIsOpen}
+          resetForm={resetForm}
         />
       </ModalComponent>
     </>

@@ -7,6 +7,7 @@ const DocumentForm = ({
   formValues,
   handleSaveDocument,
   setModalIsOpen,
+  resetForm,
 }) => {
   const { register, handleSubmit, errors } = useForm();
   const { documentName, documentType, documentEndDate } = formValues;
@@ -60,7 +61,7 @@ const DocumentForm = ({
             type="button"
             value="Cancel"
             className="w-24 flex items-center justify-center mt-4 mx-4 rounded-md border border-gray-300 px-3 py-2 bg-white hover:bg-gray-800 hover:text-white duration-200"
-            onClick={() => setModalIsOpen(false)}
+            onClick={resetForm}
           />
         </div>
       </form>
