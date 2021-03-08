@@ -6,9 +6,15 @@ import {
   WARNING_THRESHOLD,
 } from "../utils/constants";
 
-const ItemList = () => {
+const ItemList = ({ openModal, onEdit, setIsEditing }) => {
   const { documentState } = useDocumentState();
   const userDocuments = documentState.documents.list;
+
+  const handleEdit = (data) => {
+    setIsEditing(true);
+    openModal(true);
+    onEdit(data);
+  };
 
   return (
     <div className="flex place-content-center my-8 w-1/2 mx-auto">
@@ -41,8 +47,16 @@ const ItemList = () => {
                     🕒 {remainingDays}d
                   </span>
                 )}
-                <button className="mx-3 my-auto">&#9997;</button>
-                <button className="mx-3 my-auto">&#10005;</button>
+                <button
+                  id="edit"
+                  className="mx-3 my-auto"
+                  onClick={() => handleEdit(doc)}
+                >
+                  &#9997;
+                </button>
+                <button id="delete" className="mx-3 my-auto">
+                  &#10005;
+                </button>
               </div>
             </div>
           );
