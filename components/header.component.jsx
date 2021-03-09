@@ -26,11 +26,10 @@ const Header = ({ name }) => {
         </h1>
         <div className="flex flex-row">
           <p className="mx-2">
-            <span className="text-2xl">{documentsUploaded}</span> documents
-            uploaded
+            <span className="text-2xl">{documentsUploaded}</span> entries added
           </p>
           <p className="mx-2">
-            <span className="text-2xl">{badDocuments}</span> documents need
+            <span className="text-2xl">{badDocuments}</span> entries need
             attention
           </p>
         </div>
