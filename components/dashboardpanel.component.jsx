@@ -6,6 +6,7 @@ import { useDocumentState } from "../utils/documentContext";
 import {
   ADD_DOCUMENT,
   EDIT_DOCUMENT,
+  DELETE_DOCUMENT,
   INITIAL_FORM_STATE,
 } from "../utils/constants";
 import ModalComponent from "../components/common/modal.component";
@@ -45,6 +46,14 @@ const DashboardPanel = () => {
     resetForm();
   };
 
+  const handleDeleteDocument = async (data) => {
+    await performTransaction(data, DELETE_DOCUMENT);
+    addToast("Deleted Successfully", {
+      appearance: "success",
+      autoDismiss: true,
+    });
+  };
+
   return (
     <>
       <div className="flex flex-col mx-auto my-5 px-5 max-w-5xl">
@@ -52,20 +61,20 @@ const DashboardPanel = () => {
           onClick={() => setModalIsOpen(true)}
           className="ml-auto rounded-md border px-3 py-2 bg-gray-800 text-white hover:bg-white hover:text-gray-800 hover:border-gray-800 duration-200"
         >
-          Add Document
+          Add &#10024;
         </button>
         <ItemList
           openModal={setModalIsOpen}
           onEdit={setFormState}
+          onDelete={handleDeleteDocument}
           setIsEditing={setIsEditing}
         />
       </div>
       <ModalComponent isOpen={modalIsOpen} onRequestClose={resetForm}>
         <DocumentForm
-          formTitle={isEditing ? "Edit Document" : "Add a Document"}
+          formTitle={isEditing ? "Edit Entry" : "Add a new entry"}
           formValues={isEditing ? formState : INITIAL_FORM_STATE}
           handleSaveDocument={handleSaveDocument}
-          setModalIsOpen={setModalIsOpen}
           resetForm={resetForm}
         />
       </ModalComponent>

@@ -6,7 +6,6 @@ const DocumentForm = ({
   formTitle,
   formValues,
   handleSaveDocument,
-  setModalIsOpen,
   resetForm,
 }) => {
   const { register, handleSubmit, errors } = useForm();
@@ -20,14 +19,14 @@ const DocumentForm = ({
       >
         <FormInput
           classNames="mb-6 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          label="Document Name"
+          label="Name"
           name="documentName"
           placeholder="Ex. Passport, Drivers License, etc."
           ref={register({ required: true, maxLength: 50, minLength: 2 })}
           defaultValue={documentName}
         />
 
-        <label>Document Type</label>
+        <label>Type</label>
         <select
           className="mb-6 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           name="documentType"

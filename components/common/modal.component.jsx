@@ -31,8 +31,8 @@ const style = {
   },
 };
 
-const ModalComponent = ({ children, ...otherProps }) => (
-  <Modal style={style} {...otherProps}>
+const ModalComponent = ({ children, customStyle, ...otherProps }) => (
+  <Modal style={customStyle || style} {...otherProps}>
     {children}
   </Modal>
 );
