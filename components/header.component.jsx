@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDocumentState } from "../utils/documentContext";
+import { getRemainingDays } from "../utils/dateUtils";
+import { DANGER_THRESHOLD } from "../utils/constants";
 
 const Header = ({ name }) => {
   const { documentState } = useDocumentState();
@@ -14,8 +16,11 @@ const Header = ({ name }) => {
   }, [list]);
 
   const updateBadDocuments = () => {
-    // TODO: add logic to compute bad documents from "list"
-    setBadDocuments(0);
+    const badDocumentsCount = list.reduce((n, doc) => {
+      return n + (getRemainingDays(doc.documentEndDate) <= DANGER_THRESHOLD);
+    }, 0);
+
+    setBadDocuments(badDocumentsCount);
   };
 
   return (
