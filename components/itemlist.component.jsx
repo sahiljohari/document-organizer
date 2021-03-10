@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDocumentState } from "../utils/documentContext";
 import { getRemainingDays } from "../utils/dateUtils";
 import {
@@ -8,21 +8,32 @@ import {
 } from "../utils/constants";
 import Confirmation from "../components/common/confirmation.component";
 
-const ItemList = ({ openModal, onEdit, onDelete, setIsEditing }) => {
+const ItemList = ({ openModal, onEdit, onDelete }) => {
   const { documentState } = useDocumentState();
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [dataToDelete, setDataToDelete] = useState(null);
   const userDocuments = documentState.documents.list;
 
+  useEffect(() => {
+    userDocuments.sort((a, b) =>
+      getRemainingDays(a.documentEndDate) >= getRemainingDays(b.documentEndDate)
+        ? 1
+        : -1
+    );
+  }, [userDocuments]);
+
   const handleEdit = (data) => {
-    setIsEditing(true);
     openModal(true);
     onEdit(data);
   };
 
   const handleDelete = (data) => {
     if (data) {
+      setIsDeleting(true);
       onDelete(data);
+      setIsDeleting(false);
+
       setConfirmationIsOpen(false);
     }
   };
@@ -84,6 +95,8 @@ const ItemList = ({ openModal, onEdit, onDelete, setIsEditing }) => {
       </div>
       <Confirmation
         isOpen={confirmationIsOpen}
+        processing={isDeleting}
+        processingMessage="Deleting..."
         title="Delete Entry"
         message="Are you sure you want to delete this entry?"
         highlight={dataToDelete?.documentName}

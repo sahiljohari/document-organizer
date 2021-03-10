@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext, createContext } from "react";
+import Router from "next/router";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -88,6 +89,7 @@ function useProvideAuth() {
         });
       } else {
         setUser(null);
+        Router.push("/");
       }
     });
 

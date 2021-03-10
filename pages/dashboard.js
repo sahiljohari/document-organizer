@@ -15,7 +15,11 @@ const Dashboard = () => {
   }, [user]);
 
   if (!user) {
-    return <h1>Loading...</h1>;
+    return (
+      <h1 className="text-center text-6xl text-gray-400 font-bold w-full h-full">
+        Working on it...
+      </h1>
+    );
   }
 
   const { displayName, email, photoURL } = user;

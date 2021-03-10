@@ -36,6 +36,8 @@ const Confirmation = ({
   highlight,
   handleConfirm,
   isOpen,
+  processing,
+  processingMessage,
   onRequestClose,
   ...otherProps
 }) => {
@@ -44,9 +46,11 @@ const Confirmation = ({
       <h2 className="uppercase text-2xl mb-4 font-medium">{title}</h2>
       <p>{message}</p>
       <p className="italic font-medium text-yellow-700 my-2">{highlight}</p>
+      {processing && <p className="text-left mx-6 mt-2">{processingMessage}</p>}
       <div className="flex flex-row w-1/2 mx-auto justify-center">
         <button
           onClick={handleConfirm}
+          disabled={processing}
           className="w-24 flex items-center justify-center mt-4 mr-4 rounded-md border border-gray-300 px-3 py-2 bg-gray-800 text-white hover:bg-white hover:text-gray-800 hover:border-gray-800 duration-200"
         >
           Yes
