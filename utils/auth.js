@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, createContext } from "react";
-import Router from "next/router";
+import { useToasts } from "react-toast-notifications";
+import { useRouter } from "next/router";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -25,6 +26,8 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [user, setUser] = useState(null);
+  const { addToast } = useToasts();
+  const router = useRouter();
 
   const signin = async (email, password) => {
     const response = await firebase
@@ -70,7 +73,11 @@ function useProvideAuth() {
           ...additionalData,
         });
       } catch (error) {
-        console.log("Error creating user", error.message);
+        console.error("Error creating user", error.message);
+
+        addToast("Something went wrong. Please try again...", {
+          appearance: "error",
+        });
       }
     }
 
@@ -89,7 +96,9 @@ function useProvideAuth() {
         });
       } else {
         setUser(null);
-        Router.push("/");
+        if (router.pathname === "/dashboard") {
+          router.push("/");
+        }
       }
     });
 

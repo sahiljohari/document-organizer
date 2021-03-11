@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { documentTypes } from "../utils/constants";
 import FormInput from "./common/forminput.component";
+import ValidationMessage from "./common/validationmessage.component";
 
 const DocumentForm = ({
   formTitle,
@@ -26,6 +27,19 @@ const DocumentForm = ({
           placeholder="Ex. Passport, Drivers License, etc."
           ref={register({ required: true, maxLength: 50, minLength: 2 })}
         />
+        {errors.documentName && errors.documentName.type === "required" && (
+          <ValidationMessage>This field is required</ValidationMessage>
+        )}
+        {errors.documentName && errors.documentName.type === "minLength" && (
+          <ValidationMessage>
+            Name should have minimum 2 characters
+          </ValidationMessage>
+        )}
+        {errors.documentName && errors.documentName.type === "maxLength" && (
+          <ValidationMessage>
+            Name cannot exceed 50 characters
+          </ValidationMessage>
+        )}
 
         <label>Type</label>
         <select
@@ -48,6 +62,10 @@ const DocumentForm = ({
           type="date"
           ref={register({ required: true })}
         />
+        {errors.documentEndDate &&
+          errors.documentEndDate.type === "required" && (
+            <ValidationMessage>This field is required</ValidationMessage>
+          )}
 
         <div className="flex flex-row w-1/2 mx-auto justify-center">
           <input
