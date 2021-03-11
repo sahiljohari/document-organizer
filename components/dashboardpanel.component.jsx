@@ -16,18 +16,18 @@ import DocumentForm from "../components/documentform.component";
 const DashboardPanel = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [formState, setFormState] = useState(INITIAL_FORM_STATE);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const { performTransaction } = useDocumentState();
   const { addToast } = useToasts();
 
   const resetForm = () => {
     setModalIsOpen(false);
-    setIsEditing(false);
     setFormState(INITIAL_FORM_STATE);
   };
 
   const handleSaveDocument = async (data) => {
-    if (!isEditing) {
+    setIsSaving(true);
+    if (formState === INITIAL_FORM_STATE) {
       const payload = {
         id: uuid(),
         createdOn: new Date(),
@@ -36,13 +36,13 @@ const DashboardPanel = () => {
       await performTransaction(payload, ADD_DOCUMENT);
     } else {
       await performTransaction({ ...formState, ...data }, EDIT_DOCUMENT);
-      setIsEditing(false);
     }
 
     addToast("Saved Successfully", {
       appearance: "success",
       autoDismiss: true,
     });
+    setIsSaving(false);
     resetForm();
   };
 
@@ -67,15 +67,17 @@ const DashboardPanel = () => {
           openModal={setModalIsOpen}
           onEdit={setFormState}
           onDelete={handleDeleteDocument}
-          setIsEditing={setIsEditing}
         />
       </div>
       <ModalComponent isOpen={modalIsOpen} onRequestClose={resetForm}>
         <DocumentForm
-          formTitle={isEditing ? "Edit Entry" : "Add a new entry"}
-          formValues={isEditing ? formState : INITIAL_FORM_STATE}
+          formTitle={
+            formState === INITIAL_FORM_STATE ? "Add a new entry" : "Edit Entry"
+          }
+          formValues={formState}
           handleSaveDocument={handleSaveDocument}
           resetForm={resetForm}
+          processing={isSaving}
         />
       </ModalComponent>
     </>

@@ -1,5 +1,6 @@
 import { useState, useContext, createContext } from "react";
 import { useAuth, firebase } from "./auth";
+import { useToasts } from "react-toast-notifications";
 import {
   addDocumentUtil,
   editDocumentUtil,
@@ -23,6 +24,7 @@ export const useDocumentState = () => {
 
 const useProvideDocumentState = () => {
   const { user } = useAuth();
+  const { addToast } = useToasts();
 
   const [documentState, setDocumentState] = useState({
     documents: {
@@ -62,6 +64,10 @@ const useProvideDocumentState = () => {
         "Error performing transaction with the database...",
         error.message
       );
+
+      addToast("Something went wrong. Please try again...", {
+        appearance: "error",
+      });
     }
   };
 
