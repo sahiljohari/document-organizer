@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useDocumentState } from "../utils/documentContext";
-import { getRemainingDays } from "../utils/dateUtils";
+import { getRemainingDays, isDateInPast } from "../utils/dateUtils";
 import {
   documentTypes,
   DANGER_THRESHOLD,
   WARNING_THRESHOLD,
 } from "../utils/constants";
+import Item from "./item.component";
 import Confirmation from "../components/common/confirmation.component";
 import EmptyView from "../components/common/emptyview.component";
 
@@ -14,6 +15,8 @@ const ItemList = ({ openModal, onEdit, onDelete }) => {
   const [confirmationIsOpen, setConfirmationIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [dataToDelete, setDataToDelete] = useState(null);
+  const [expiredList, setExpiredList] = useState([]);
+
   const userDocuments = documentState.documents.list;
 
   useEffect(() => {
@@ -22,7 +25,10 @@ const ItemList = ({ openModal, onEdit, onDelete }) => {
         ? 1
         : -1
     );
-  }, [userDocuments]);
+    setExpiredList(() =>
+      userDocuments.filter((doc) => isDateInPast(doc.documentEndDate))
+    );
+  }, [documentState.documents.list]);
 
   const handleEdit = (data) => {
     openModal(true);
@@ -39,64 +45,99 @@ const ItemList = ({ openModal, onEdit, onDelete }) => {
     }
   };
 
+  const getStatusStyle = (endDate) => {
+    let style = "";
+
+    if (isDateInPast(endDate)) {
+      style = "border-gray-400";
+    } else {
+      const remainingDays = getRemainingDays(endDate);
+      style =
+        remainingDays <= WARNING_THRESHOLD
+          ? remainingDays <= DANGER_THRESHOLD
+            ? "border-red-600"
+            : "border-yellow-500"
+          : "border-green-700";
+    }
+
+    return style;
+  };
+
+  const getStatus = (endDate) => {
+    let statusContent = "";
+
+    if (isDateInPast(endDate)) {
+      statusContent = (
+        <span className="mr-4 my-auto text-sm font-light">Expired 💀</span>
+      );
+    } else {
+      const remainingDays = getRemainingDays(endDate);
+      if (remainingDays <= WARNING_THRESHOLD) {
+        statusContent = (
+          <span className="mr-4 my-auto text-sm font-light">
+            🕒 {remainingDays}d
+          </span>
+        );
+      }
+    }
+
+    return statusContent;
+  };
+
   if (documentState.documents.count === 0) {
     return <EmptyView />;
   }
 
   return (
     <>
-      <div className="flex place-content-center my-8 w-1/2 mx-auto">
-        <ul className="w-full">
+      <div className="flex flex-col place-content-center my-8 w-1/2 mx-auto divide-y divide-gray-300">
+        <ul className="w-full py-2">
           {userDocuments.length > 0 &&
             userDocuments.map((doc) => {
               const { id, documentName, documentType, documentEndDate } = doc;
-              const remainingDays = getRemainingDays(documentEndDate);
               return (
-                <div
-                  key={id}
-                  className={`flex flex-row place-content-between p-2 border-l-8 border rounded-md my-2 ${
-                    remainingDays <= WARNING_THRESHOLD
-                      ? remainingDays <= DANGER_THRESHOLD
-                        ? "border-red-600"
-                        : "border-yellow-500"
-                      : "border-green-700"
-                  }`}
-                >
-                  <div className="flex flex-row place-content-evenly">
-                    <span className="mr-4 my-auto">
-                      {documentTypes[documentType]["icon"]}
-                    </span>
-                    <span className="mr-4 my-auto text-lg text-indigo-900 font-medium">
-                      {documentName}
-                    </span>
-                  </div>
-                  <div>
-                    {remainingDays <= WARNING_THRESHOLD && (
-                      <span className="mr-4 my-auto text-sm font-light">
-                        🕒 {remainingDays}d
-                      </span>
-                    )}
-                    <button
-                      id="edit"
-                      className="mx-3 my-auto"
-                      onClick={() => handleEdit(doc)}
-                    >
-                      &#9997;
-                    </button>
-                    <button
-                      id="delete"
-                      className="mx-3 my-auto"
-                      onClick={() => {
-                        setConfirmationIsOpen(true);
-                        setDataToDelete(doc);
-                      }}
-                    >
-                      &#10005;
-                    </button>
-                  </div>
-                </div>
+                !isDateInPast(documentEndDate) && (
+                  <Item
+                    key={id}
+                    icon={documentTypes[documentType]["icon"]}
+                    title={documentName}
+                    status={getStatus(documentEndDate)}
+                    statusStyle={getStatusStyle(documentEndDate)}
+                    onEditClick={() => handleEdit(doc)}
+                    onDeleteClick={() => {
+                      setConfirmationIsOpen(true);
+                      setDataToDelete(doc);
+                    }}
+                  />
+                )
               );
             })}
+        </ul>
+        <ul className="w-full py-2">
+          {expiredList.length > 0 ? (
+            expiredList.map((doc) => {
+              const { id, documentName, documentType, documentEndDate } = doc;
+              return (
+                <Item
+                  key={id}
+                  icon={documentTypes[documentType]["icon"]}
+                  title={documentName}
+                  status={getStatus(documentEndDate)}
+                  statusStyle={getStatusStyle(documentEndDate)}
+                  onEditClick={() => handleEdit(doc)}
+                  onDeleteClick={() => {
+                    setConfirmationIsOpen(true);
+                    setDataToDelete(doc);
+                  }}
+                />
+              );
+            })
+          ) : (
+            <EmptyView
+              customMessage={"Nothing has expired yet!"}
+              showGraphic={false}
+            />
+          )}
         </ul>
       </div>
       <Confirmation

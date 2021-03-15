@@ -14,4 +14,11 @@ const getRemainingDays = (expiryDate) => {
   return diffDays;
 };
 
-export { formatDate, getRemainingDays };
+const isDateInPast = (date) => {
+  const pureDate = new Date(date).setHours(0, 0, 0, 0);
+  const today = new Date().setHours(0, 0, 0, 0);
+
+  return pureDate < today;
+};
+
+export { formatDate, getRemainingDays, isDateInPast };
